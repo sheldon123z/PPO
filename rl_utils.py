@@ -27,7 +27,18 @@ def moving_average(a, window_size):
     end = (np.cumsum(a[:-window_size:-1])[::2] / r)[::-1]
     return np.concatenate((begin, middle, end))
 
+
 def train_on_policy_agent(env, agent, num_episodes):
+    '''
+    这是一个用于训练 PPO 算法的函数。该函数使用给定的智能体（agent）在给定的环境（env）上进行一定数量（num_episodes）的训练，并返回一个列表，
+    其中包含每一轮训练所得到的回报值。具体地，该函数通过多次循环来进行训练。
+    在每一轮循环中，首先重置环境并获取当前状态，然后利用智能体的策略网络（agent.take_action(state)）
+    来选择一个动作，并执行该动作，获取下一个状态、即时奖励和终止信号。接着，将当前状态、动作、下一个状态、即时奖励和终止信号存储在一个字典中（transition_dict），以便在后续的更新过程中使用。
+    在每个轮次结束时，将该轮次的回报值添加到 return_list 列表中，并调用智能体的 update 方法来更新策略网络和价值网络的参数。
+    具体来说，该方法首先使用字典中存储的数据来计算出优势函数的值，并根据优化目标来计算出策略网络和价值网络的损失函数，并使用反向传播算法来更新网络的参数。
+    为了方便用户了解训练的进度和效果，该函数还使用了 tqdm 模块来显示训练的进度条和回报值统计信息。每完成一定数量的轮次后，该函数将打印出该轮次的平均回报值，并更新进度条的显示信息。
+    总之，该函数实现了一个简单的 PPO 算法的训练流程，可以通过适当调整函数的参数来进行定制化的训练过程。
+    '''
     return_list = []
     for i in range(10):
         with tqdm(total=int(num_episodes/10), desc='Iteration %d' % i) as pbar:
@@ -37,6 +48,7 @@ def train_on_policy_agent(env, agent, num_episodes):
                 state = env.reset()
                 done = False
                 while not done:
+                    # env.render()
                     action = agent.take_action(state)
                     next_state, reward, done, _ = env.step(action)
                     transition_dict['states'].append(state)
