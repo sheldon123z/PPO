@@ -63,9 +63,9 @@ class PPO:
         return action.item()
 
     def update(self, transition_dict):  # 传入的是一个字典，包含了一条序列的数据
-        states = torch.tensor(transition_dict["states"], dtype=torch.float).to(
-            self.device
-        )
+        states = torch.tensor(
+            np.array(transition_dict["states"]), dtype=torch.float
+        ).to(self.device)
         actions = torch.tensor(transition_dict["actions"]).view(-1, 1).to(self.device)
         rewards = (
             torch.tensor(transition_dict["rewards"], dtype=torch.float)
@@ -136,8 +136,7 @@ if __name__ == "__main__":
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
     env_name = "CartPole-v0"
-    env = gym.make(env_name)
-    env.seed(0)  #
+    env = gym.make(env_name)  #
     torch.manual_seed(0)
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
@@ -155,7 +154,6 @@ if __name__ == "__main__":
     )
 
     return_list = rl_utils.train_on_policy_agent(env, agent, num_episodes)
-
     torch.save(agent.actor.state_dict(), "ppo_cartpole.pth")  # 保存模型
     episodes_list = list(range(len(return_list)))
     plt.plot(episodes_list, return_list)
@@ -170,4 +168,3 @@ if __name__ == "__main__":
     plt.ylabel("Returns")
     plt.title("PPO on {}".format(env_name))
     plt.show()
-~
