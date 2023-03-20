@@ -1,0 +1,25 @@
+{
+    "name": "Python: Conda",
+    "type": "python",
+    "request": "launch",
+    "python": "${command:python.interpreterPath}",
+    "program": "${file}",
+    "console": "integratedTerminal",
+    "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "PATH": "${env:PATH}:${env:CONDA_PREFIX}/bin"
+    },
+    "configurations": [
+        {
+            "name": "Python: Current File (Integrated Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "/Users/xiaodongzheng/opt/anaconda3/envs/pytorch/lib/python3.9/site-packages"
+            }
+        }
+    ]
+    
+}
