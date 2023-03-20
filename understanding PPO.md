@@ -2,16 +2,14 @@
 
 在TRPO算法中，$r_t(\theta)$ 表示代理在状态 $s_t$ 选择动作 $a_t$ 的概率比率，即使用当前策略 $\pi_\theta(a_t|s_t)$ 选择动作 $a_t$ 的概率与使用旧策略 $\pi_{\theta_{old}}(a_t|s_t)$ 选择动作 $a_t$ 的概率之比，即：
 
-$
-r_t(\theta)=\frac{\pi_\theta\left(a_t \mid s_t\right)}{\pi_{\theta_{\text {old }}}\left(a_t \mid s_t\right)}
-$
+$r_t(\theta)=\frac{\pi_\theta\left(a_t \mid s_t\right)}{\pi_{\theta_{\text {old }}}\left(a_t \mid s_t\right)}$
 
 如果 $r_t(\theta)>1$，则说明当前策略比旧策略更好；如果 $r_t(\theta)<1$，则说明当前策略更差。
 
 TRPO算法的优化目标是最大化一个“替代”目标函数（surrogate objective function），该函数的表达式为：
-$
-L^{s u r}(\theta)=\mathbb{E}_t\left[r_t(\theta) A_t\right]
-$
+
+$L^{s u r}(\theta)=\mathbb{E}_t\left[r_t(\theta) A_t\right]$
+
 其中 $\mathbb{E}_t$ 表示对时间步 $t$ 的期望，$A_t$ 表示优势函数的估计值，用于衡量在状态 $s_t$ 采取动作 $a_t$ 相对于采取平均动作的价值提升程度。优势函数的估计值通常使用 GAE (Generalized Advantage Estimation) 方法计算得到。
 
 TRPO算法最大化替代目标函数的同时，需要满足一个约束条件，即当前策略 $\pi_\theta(a_t|s_t)$ 与旧策略 $\pi_{\theta_{old}}(a_t|s_t)$ 的 KL 散度不超过一个指定的阈值。通过限制策略更新的幅度，TRPO算法可以确保策略改进的稳定性和效率。
